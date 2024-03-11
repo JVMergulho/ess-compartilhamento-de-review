@@ -83,10 +83,11 @@ const restaurant_edit = async (req, res) => {
             return res.status(404).json({ error: 'Restaurante não encontrado' });
         }
 
-        const {name, address, typeOfFood, site} = req.body
+        const {name, address} = req.body
+        const {city, number, street, neighborhood} = address
 
         // Verificar se os novos dados já existem em outro restaurante
-        const restaurantExist = await Restaurant.findOne({ 'name': name, 'address': address });
+        const restaurantExist = await Restaurant.findOne({ 'name': name, 'address.city': city, 'address.number': number, 'address.street': street, 'address.neighborhood': neighborhood });
 
         if (restaurantExist && restaurantExist._id.toString() !== req.params.id) {
             return res.status(400).json({ error: 'Os dados de endereço e nome do restaurante não podem ser iguais a outro já cadastrado' });
